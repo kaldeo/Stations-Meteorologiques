@@ -1,6 +1,17 @@
-const express = require('express')
-const app = express()
-const port = 3000
+const express = require('express');
+const mongoose = require('mongoose');
+const app = express();
 
-app.get('/', (req, res) => res.send('Hello World!'))
-app.listen(port, () => console.log(`Example app listening on port ${port}!`))
+app.use(express.json());
+
+// Connexion MongoDB
+mongoose.connect('mongodb://localhost:27017/meteoDB')
+    .then(() => console.log("Connecté à MongoDB"))
+    .catch(err => console.error("Erreur de connexion", err));
+
+// Import des routes
+app.use('/', require('./routes/post.route'));
+app.use('/', require('./routes/get.route'));
+
+const PORT = 3000;
+app.listen(PORT, () => console.log(`Serveur lancé sur le port ${PORT}`));
